@@ -4,6 +4,7 @@ import { httpServer } from './http_server/server';
 import robot from 'robotjs';
 import { WebSocketServer, createWebSocketStream, WebSocket } from 'ws';
 import { drawCircle } from './http_server/helpers/drawCircle';
+import { drawRectangle } from './http_server/helpers/drawRectangle';
 
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
 const WSS_PORT: number = Number(process.env.WSS_PORT) || 8080;
@@ -46,6 +47,10 @@ webSocketServer.on('connection', (ws: WebSocket) => {
         break;
       case 'draw_circle':
         drawCircle(parameters[0], mouse);
+        duplex.write(`${command}`);
+        break;
+      case 'draw_rectangle':
+        drawRectangle(mouse, parameters[0], parameters[1]);
         duplex.write(`${command}`);
         break;
       default:
