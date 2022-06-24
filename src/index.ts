@@ -3,6 +3,7 @@ import Jimp from 'jimp';
 import { httpServer } from './http_server/server';
 import robot from 'robotjs';
 import { WebSocketServer, createWebSocketStream, WebSocket } from 'ws';
+import { drawCircle } from './http_server/helpers/drawCircle';
 
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
 const WSS_PORT: number = Number(process.env.WSS_PORT) || 8080;
@@ -38,6 +39,10 @@ webSocketServer.on('connection', (ws: WebSocket) => {
         break;
       case 'mouse_right':
         robot.moveMouseSmooth(mouse.x + parameters[0], mouse.y);
+        duplex.write(`${command}`);
+        break;
+      case 'draw_circle':
+        drawCircle(parameters[0], mouse);
         duplex.write(`${command}`);
         break;
       default:
