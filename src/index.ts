@@ -24,34 +24,38 @@ webSocketServer.on('connection', (ws: WebSocket) => {
     const command = dataArr[0];
     const parameters: Array<number> = dataArr.slice(1).map(parseFloat);
     const mouse = robot.getMousePos();
-    console.log(`${command} ${parameters}`);
+    if (command === 'mouse_position') {
+      console.log(`Recieved: mouse_position ${mouse.x},${mouse.y}`);
+    } else {
+      console.log(`Recieved: ${command} ${parameters.join(' ')}`);
+    }
     switch (command) {
       case 'mouse_position':
         duplex.write(`mouse_position ${mouse.x},${mouse.y}\0`);
         break;
       case 'mouse_up':
-        robot.moveMouseSmooth(mouse.x, mouse.y - parameters[0]);
         duplex.write(`${command}`);
+        robot.moveMouseSmooth(mouse.x, mouse.y - parameters[0]);
         break;
       case 'mouse_down':
-        robot.moveMouseSmooth(mouse.x, mouse.y + parameters[0]);
         duplex.write(`${command}`);
+        robot.moveMouseSmooth(mouse.x, mouse.y + parameters[0]);
         break;
       case 'mouse_left':
-        robot.moveMouseSmooth(mouse.x - parameters[0], mouse.y);
         duplex.write(`${command}`);
+        robot.moveMouseSmooth(mouse.x - parameters[0], mouse.y);
         break;
       case 'mouse_right':
-        robot.moveMouseSmooth(mouse.x + parameters[0], mouse.y);
         duplex.write(`${command}`);
+        robot.moveMouseSmooth(mouse.x + parameters[0], mouse.y);
         break;
       case 'draw_circle':
-        drawCircle(parameters[0], mouse);
         duplex.write(`${command}`);
+        drawCircle(parameters[0], mouse);
         break;
       case 'draw_rectangle':
-        drawRectangle(mouse, parameters[0], parameters[1]);
         duplex.write(`${command}`);
+        drawRectangle(mouse, parameters[0], parameters[1]);
         break;
       default:
         break;
