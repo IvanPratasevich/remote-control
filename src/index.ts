@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import Jimp from 'jimp';
 import { httpServer } from './http_server/server';
 import robot from 'robotjs';
 import { WebSocketServer, createWebSocketStream, WebSocket } from 'ws';
 import { drawCircle } from './http_server/helpers/drawCircle';
 import { drawRectangle } from './http_server/helpers/drawRectangle';
 import { drawSquare } from './http_server/helpers/drawSquare';
+import { screenCapture } from './http_server/helpers/screenCapture';
 
 const HTTP_PORT = process.env.HTTP_PORT || 3000;
 const WSS_PORT: number = Number(process.env.WSS_PORT) || 8080;
@@ -20,7 +20,7 @@ const webSocketServer = new WebSocketServer({
 
 webSocketServer.on('connection', (ws: WebSocket) => {
   const duplex = createWebSocketStream(ws, { decodeStrings: false, encoding: 'utf8' });
-  duplex.on('data', (data) => {
+  duplex.on('data', async (data) => {
     const dataArr = data.split(' ').filter((el: string) => el.trim());
     const command = dataArr[0];
     const parameters: Array<number> = dataArr.slice(1).map(parseFloat);
@@ -61,6 +61,15 @@ webSocketServer.on('connection', (ws: WebSocket) => {
       case 'draw_square':
         duplex.write(`${command}`);
         drawSquare(mouse, parameters[0]);
+        break;
+      case 'prnt_scrn':
+        screenCapture(mouse)
+          .then((image: string) => {
+            duplex.write(`prnt_scrn ${image} \0`);
+          })
+          .catch((error) => {
+            console.log(`Error: ${error}`);
+          });
         break;
       default:
         break;
