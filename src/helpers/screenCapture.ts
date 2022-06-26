@@ -12,10 +12,8 @@ export const screenCapture = async (mouse: { x: number; y: number }): Promise<st
         screenWidth,
         screenHeight
       ).image;
-      for (let i = 0; i < screenBuffer.length; i++) {
-        if (i % 4 == 0) {
-          [screenBuffer[i], screenBuffer[i + 2]] = [screenBuffer[i + 2], screenBuffer[i]];
-        }
+      for (let i = 0; i < screenBuffer.length; i += 4) {
+        [screenBuffer[i], screenBuffer[i + 2]] = [screenBuffer[i + 2], screenBuffer[i]];
       }
       const image: Jimp = new Jimp({ data: screenBuffer, width: screenWidth, height: screenHeight });
       const base64: string = await image.getBase64Async(Jimp.MIME_PNG);
