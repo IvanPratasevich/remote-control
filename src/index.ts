@@ -42,32 +42,32 @@ webSocketServer.on('connection', (ws: WebSocket) => {
           duplex.write(`mouse_position ${mouse.x},${mouse.y} \0`);
           break;
         case 'mouse_up':
-          duplex.write(`${command}`);
           robot.moveMouseSmooth(mouse.x, mouse.y - parameters[0]);
+          duplex.write(`${command}`);
           break;
         case 'mouse_down':
-          duplex.write(`${command}`);
           robot.moveMouseSmooth(mouse.x, mouse.y + parameters[0]);
+          duplex.write(`${command}`);
           break;
         case 'mouse_left':
-          duplex.write(`${command}`);
           robot.moveMouseSmooth(mouse.x - parameters[0], mouse.y);
+          duplex.write(`${command}`);
           break;
         case 'mouse_right':
-          duplex.write(`${command}`);
           robot.moveMouseSmooth(mouse.x + parameters[0], mouse.y);
+          duplex.write(`${command}`);
           break;
         case 'draw_circle':
-          duplex.write(`${command}`);
           drawCircle(parameters[0], mouse);
+          duplex.write(`${command}`);
           break;
         case 'draw_rectangle':
-          duplex.write(`${command}`);
           drawRectangle(mouse, parameters[0], parameters[1]);
+          duplex.write(`${command}`);
           break;
         case 'draw_square':
-          duplex.write(`${command}`);
           drawSquare(mouse, parameters[0]);
+          duplex.write(`${command}`);
           break;
         case 'prnt_scrn':
           await screenCapture(mouse)
