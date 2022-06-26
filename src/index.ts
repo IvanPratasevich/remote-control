@@ -42,6 +42,7 @@ webSocketServer.on('connection', (ws: WebSocket) => {
           duplex.write(`mouse_position ${mouse.x},${mouse.y} \0`);
           break;
         case 'mouse_up':
+          duplex.write(`${command}`);
           robot.moveMouseSmooth(mouse.x, mouse.y - parameters[0]);
           break;
         case 'mouse_down':
